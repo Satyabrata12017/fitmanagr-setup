@@ -8,7 +8,8 @@ This page covers installation and setup only. The FitManagr source code is priva
 
 | You want | Setup | Guide |
 |---|---|---|
-| Gym management inside your existing **ERPNext** (no separate app) | Backend only, used from the ERPNext desk | [ERPNext Desk-only setup](erpnext-desk-only.md) |
+| Gym management inside your existing **ERPNext** (no separate app) | Backend only, used from the ERPNext desk | [ERPNext guide with screenshots](erpnext-desk-only.md) |
+| Show FitManagr to a client | Demo site with sample data, plus a 30-minute script | [Client demo script](client-demo.md) |
 | The full FitManagr experience: owner app, member app, kiosk and mobile apps | Backend + Frontend | [Backend](backend-install.md) → [Frontend](frontend-install.md) |
 | Your **own custom UI** (website, Flutter, React) on top of ERPNext | Backend + your UI using the REST API | [Custom UI on ERPNext](custom-ui.md) |
 | Run FitManagr as a multi-gym **SaaS** with self-signup and online billing | Backend + Frontend + Cloud | [SaaS / Cloud setup](cloud-saas.md) |
