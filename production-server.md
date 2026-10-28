@@ -5,7 +5,9 @@ This guide puts the whole of FitManagr on one Ubuntu server under one domain:
 | Path | Serves |
 |---|---|
 | `https://your-domain/` | FitManagr web app (owners, staff, members, admin console) |
+| `https://your-domain/frontend/login` | Web app login (owners, staff, members, platform admin) |
 | `https://your-domain/app` | ERPNext / Frappe Desk |
+| `https://your-domain/login` | ERPNext / Frappe Desk login |
 | `https://your-domain/api/` | REST API used by the web and mobile apps |
 | `https://your-domain/downloads/` | Android APK download and iPhone install steps |
 
