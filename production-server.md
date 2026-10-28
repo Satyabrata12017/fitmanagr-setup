@@ -10,6 +10,7 @@ This guide puts the whole of FitManagr on one Ubuntu server under one domain:
 | `https://your-domain/login` | ERPNext / Frappe Desk login |
 | `https://your-domain/api/` | REST API used by the web and mobile apps |
 | `https://your-domain/downloads/` | Android APK download and iPhone install steps |
+| `https://your-domain/shop/<store-address>` | A gym's online store (set in the gym app → Store → Settings) |
 
 Tested on Ubuntu 24.04 with Frappe and ERPNext v15. The scripts are in the `deploy/` folder of the private `fitmanagr` repository.
 
@@ -62,21 +63,21 @@ The server issues a free Let's Encrypt certificate, adds the domain to nginx and
 | Android | `https://your-domain/downloads/` → **Download for Android**. Publish the `.aab` build on Google Play when ready. |
 | iPhone / iPad | Open the site in Safari → **Share → Add to Home Screen**. A native App Store app needs an Apple Developer account. |
 
-## 6. Releases and updates (from the desk)
+## 6. Releases and updates
 
-**One-time setup**
-1. On GitHub create a **fine-grained personal access token**: *Repository access* → the backend and frontend repositories, *Permissions* → **Contents: Read-only**.
-2. Desk → **FitManagr Platform → Release Settings** → GitHub section: paste the token, check the repositories and branches, **Save**.
-3. For automatic Android builds, add these secrets to the frontend repository (*Settings → Secrets and variables → Actions*): `API_URL` (your site URL), `ANDROID_KEYSTORE_BASE64` (`base64 -w0 upload.jks`), `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_PASSWORD`. Always use the same keystore, or phones can't install the update.
+Everything is done from the **super admin app → Releases** (or Desk → FitManagr Release).
+
+**One-time setup** (super admin app → Releases → **Settings**)
+1. **GitHub**: a fine-grained token with *Contents: Read-only* on the backend and frontend repositories (shown masked, eye button to reveal).
+2. **Google Play** (optional, any time later): package name, track (internal / alpha / beta / production) and the Play Console service-account JSON key.
+3. **Servers** (optional): add every other FitManagr server with its URL and a System Manager API key. Each server downloads releases from GitHub itself.
+4. For automatic Android builds add these secrets to the frontend repository: `API_URL`, `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_PASSWORD`.
 
 **Every release**
-1. Developers push to the backend and frontend branches. For a new mobile app version, bump `version` in the frontend's `package.json` and publish a GitHub release tagged `v<version>`. The *Android app* workflow builds the signed `FitManagr.apk` and `.aab` and attaches them to that release.
-2. The server checks GitHub every 15 minutes. Platform admins get a bell notification, and **Release Settings** lists the new commits (or click **Check for Updates**).
-3. Click **New Release**: version and notes are filled in from GitHub. Review, **Save**, then **Publish Release**.
-4. The server deploys on its own and the release form shows the log live: backend pull, migrate, desk build, web app build, Android APK, restart. A failed backend step rolls back to the previous commit; a failed web build leaves the current web app in place.
-5. Users see an **Update** button: the web app and desk reload into the new version; the Android app downloads the new APK when its version is higher (tick **Users must update** to block older versions).
-
-You can also attach an APK to the release form yourself instead of using the GitHub workflow.
+1. Publish a **GitHub Release** on the backend or frontend repository with a tag like `v1.2.0`. The release title and description become the release notes users see. For a new mobile version, bump `package.json` first; the Android workflow attaches `FitManagr.apk` and the `.aab`.
+2. The server picks it up within 15 minutes (or click **Check GitHub**). Platform admins get a bell notification.
+3. Open the release, review the notes, choose where to install it (**this server**, other servers) and optionally **Publish to Google Play**, then click **Install**. The log and each server's status update live.
+4. Users see an **Update** button in the web app, desk and Android app. Tick **Users must update** to block older Android versions.
 
 ## 7. Manual updates (command line)
 
