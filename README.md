@@ -14,6 +14,7 @@ This page covers installation and setup only. The FitManagr source code is priva
 | Your **own custom UI** (website, Flutter, React) on top of ERPNext | Backend + your UI using the REST API | [Custom UI on ERPNext](custom-ui.md) |
 | Run FitManagr as a multi-gym **SaaS** with self-signup and online billing | Backend + Frontend + Cloud | [SaaS / Cloud setup](cloud-saas.md) |
 | Hosting on **Frappe Cloud** | Backend on a private bench | [Frappe Cloud](frappe-cloud.md) |
+| Your **own server** (AWS, any VPS): app + Desk + HTTPS on one domain | Backend + Frontend on Ubuntu | [Production server](production-server.md) |
 
 ## The parts
 
