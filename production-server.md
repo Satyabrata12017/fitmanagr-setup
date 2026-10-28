@@ -60,7 +60,23 @@ The server issues a free Let's Encrypt certificate, adds the domain to nginx and
 | Android | `https://your-domain/downloads/` → **Download for Android**. Publish the `.aab` build on Google Play when ready. |
 | iPhone / iPad | Open the site in Safari → **Share → Add to Home Screen**. A native App Store app needs an Apple Developer account. |
 
-## 6. Updating
+## 6. Releases and updates (from the desk)
+
+**One-time setup**
+1. On GitHub create a **fine-grained personal access token**: *Repository access* → the backend and frontend repositories, *Permissions* → **Contents: Read-only**.
+2. Desk → **FitManagr Platform → Release Settings** → GitHub section: paste the token, check the repositories and branches, **Save**.
+3. For automatic Android builds, add these secrets to the frontend repository (*Settings → Secrets and variables → Actions*): `API_URL` (your site URL), `ANDROID_KEYSTORE_BASE64` (`base64 -w0 upload.jks`), `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_PASSWORD`. Always use the same keystore, or phones can't install the update.
+
+**Every release**
+1. Developers push to the backend and frontend branches. For a new mobile app version, bump `version` in the frontend's `package.json` and publish a GitHub release tagged `v<version>`. The *Android app* workflow builds the signed `FitManagr.apk` and `.aab` and attaches them to that release.
+2. The server checks GitHub every 15 minutes. Platform admins get a bell notification, and **Release Settings** lists the new commits (or click **Check for Updates**).
+3. Click **New Release**: version and notes are filled in from GitHub. Review, **Save**, then **Publish Release**.
+4. The server deploys on its own and the release form shows the log live: backend pull, migrate, desk build, web app build, Android APK, restart. A failed backend step rolls back to the previous commit; a failed web build leaves the current web app in place.
+5. Users see an **Update** button: the web app and desk reload into the new version; the Android app downloads the new APK when its version is higher (tick **Users must update** to block older versions).
+
+You can also attach an APK to the release form yourself instead of using the GitHub workflow.
+
+## 7. Manual updates (command line)
 
 ```bash
 SERVER=ubuntu@your-server SSH_KEY=~/.ssh/key.pem ./update-backend.sh version-15   # backend + migrate
@@ -75,5 +91,7 @@ SERVER=ubuntu@your-server SSH_KEY=~/.ssh/key.pem ./deploy-web.sh                
 | Apply Domain says DNS is wrong | The A record points to the server IP shown in Domain Settings |
 | 502 Bad Gateway | `sudo supervisorctl status`: all FitManagr processes RUNNING |
 | Emails or links show the old domain | Make the new domain primary in Domain Settings |
+| Release stays Queued | `systemctl status fitmanagr-release.path`; the log is in `/var/lib/fitmanagr/release/logs/` |
+| Check for Updates says token rejected | Create a new token with Contents: Read-only and save it in Release Settings |
 
 Support: satyabrata12017@gmail.com
